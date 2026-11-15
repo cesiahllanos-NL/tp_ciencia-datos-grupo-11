@@ -31,12 +31,13 @@ El trabajo es descriptivo y **no tiene carácter causal**.
 ## Descripción del análisis
 
 1. **Limpieza** (`01_limpieza.R`): selección de 23 variables, códigos especiales a NA, etiquetas y tratamiento de los tragos (original, winsorizado al p99, logaritmo y categorías).
+   **Descriptivas** (`02_descriptivas.R`): estadísticas antes y después de la limpieza, distribución de las variables principales, prevalencias de consumo y comparación entre la muestra completa y la del clustering.
 2. **Faltantes y outliers** (`03_faltantes_outliers.R`): saltos de cuestionario vs. no respuesta y diagnóstico de outliers en tragos.
 3. **Inferencia** (`04_chi_cuadrado.R`): chi² de independencia entre sexo y tranquilizantes, repetido por grupo de edad y nivel educativo, con Rao-Scott y Cochran-Mantel-Haenszel.
 4. **Perfiles de consumo** (`05_clustering.R`): análisis de correspondencias múltiples y clasificación jerárquica de Ward (5 clusters).
 5. **Concentración** (`07_gini_theil.R`): Gini, curva de Lorenz y descomposición del Theil de los tragos.
 6. **Gráficos de la instancia 3** (`08_graficos_instancia3.R`): el exploratorio (alcohol y tabaco por sexo, edad y clima educativo) y el comunicativo (brecha de género en tranquilizantes).
-7. **Pendientes:** descriptivas antes y después de la limpieza (`02_descriptivas.R`) y robustez de los clusters (`06_robustez_clusters.R`).
+7. **Pendiente:** robustez de los clusters (`06_robustez_clusters.R`).
 
 ## Estructura del repositorio
 
@@ -64,13 +65,14 @@ tp_g11/
 | Script | Qué hace | Archivos que genera |
 |---|---|---|
 | `01_limpieza.R` | Lee `raw/`, limpia y etiqueta | `input/base_limpia.rds`, `input/p99_tragos.rds` |
+| `02_descriptivas.R` | Descriptivas antes y después de la limpieza, distribuciones y prevalencias | `output/tablas/t16` a `t19`, `output/graficos/g16`, `g17` |
 | `03_faltantes_outliers.R` | Diagnóstico de faltantes y outliers | `output/tablas/t01` a `t04`, `output/graficos/g01`, `g02` |
 | `04_chi_cuadrado.R` | Chi², Rao-Scott y CMH | `output/tablas/t05` a `t07`, `output/graficos/g03`, `g04` |
 | `05_clustering.R` | ACM y clusters | `input/base_con_clusters.rds`, `output/tablas/t08` a `t13`, `output/graficos/g05` a `g13` |
 | `07_gini_theil.R` | Gini, Lorenz y Theil | `output/tablas/t14`, `t15`, `output/graficos/g14`, `g15` |
 | `08_graficos_instancia3.R` | Gráficos exploratorio y comunicativo | `output/graficos/grupo_11_exploratorio.jpg`, `grupo_11_comunicativo.jpg` |
 
-Las funciones propias están en `utils/` (`guardar`, `coma`, `fmt_p`, `pct`, `calcular_gini`, `calcular_theil`, `descomponer_theil`) y se cargan con `source()`.
+Las funciones propias están en `utils/` (`guardar`, `coma`, `fmt_p`, `pct`, `leer_base_encoprac`, `mediana_ponderada`, `percentil_ponderado`, `desvio_ponderado`, `calcular_gini`, `calcular_theil`, `descomponer_theil`) y se cargan con `source()`.
 
 ## Conclusiones principales
 

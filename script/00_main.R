@@ -17,7 +17,7 @@ if (length(faltantes) > 0) {
 }
 
 source("script/01_limpieza.R")            # raw/ -> input/base_limpia.rds
-# 02_descriptivas.R                       # (pendiente) descriptivas antes y después
+source("script/02_descriptivas.R")        # descriptivas antes y después de la limpieza
 source("script/03_faltantes_outliers.R")  # diagnóstico de faltantes y outliers
 source("script/04_chi_cuadrado.R")        # P1: chi², Rao-Scott y CMH
 source("script/05_clustering.R")          # P2: ACM + clasificación de Ward

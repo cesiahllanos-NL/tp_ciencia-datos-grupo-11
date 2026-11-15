@@ -7,6 +7,9 @@
 
 library(tidyverse)
 
+# Funciones propias (carpeta utils/)
+source("utils/leer_base_encoprac.R")
+
 # ---- Rutas -----------------------------------------------------------
 # Cambiá el nombre del archivo por el que descargaste del INDEC.
 ruta_base <- "raw/base_encoprac_2022.txt"
@@ -18,15 +21,7 @@ dir.create("output/graficos", recursive = TRUE, showWarnings = FALSE)
 # ---- Lectura ---------------------------------------------------------
 # Formato según el manual del INDEC: separador "|", decimales con coma,
 # texto entre comillas dobles.
-base_raw <- read_delim(
-  ruta_base,
-  delim = "|",
-  quote = "\"",
-  locale = locale(decimal_mark = ","),
-  show_col_types = FALSE,
-  guess_max = 20000
-)
-names(base_raw) <- toupper(names(base_raw))
+base_raw <- leer_base_encoprac(ruta_base)
 
 # Mismas 23 variables de la primera entrega
 vars <- c(
