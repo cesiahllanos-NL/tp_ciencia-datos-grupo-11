@@ -1,0 +1,70 @@
+cluster,categoria,n,pct,variable
+C1 · Sin consumo reciente de alcohol,Varón,3470337,0.38153348373308005,sexo
+C1 · Sin consumo reciente de alcohol,Mujer,5625423,0.61846651626692,sexo
+C2 · Consumo leve,Varón,2024732,0.5148035135350223,sexo
+C2 · Consumo leve,Mujer,1908287,0.48519648646497765,sexo
+C3 · Consumo moderado,Varón,1692862,0.6142540323458506,sexo
+C3 · Consumo moderado,Mujer,1063102,0.3857459676541493,sexo
+C4 · Consumo intensivo y policonsumo,Varón,2047465,0.6924576460637126,sexo
+C4 · Consumo intensivo y policonsumo,Mujer,909344,0.30754235393628737,sexo
+C5 · Uso de tranquilizantes,Varón,477901,0.34229721850965295,sexo
+C5 · Uso de tranquilizantes,Mujer,918257,0.6577027814903471,sexo
+C1 · Sin consumo reciente de alcohol,Edad 16-24,1849587,0.20334606453996149,grupo_edad
+C1 · Sin consumo reciente de alcohol,Edad 25-34,1540679,0.16938430653403344,grupo_edad
+C1 · Sin consumo reciente de alcohol,Edad 35-49,2671624,0.29372190998882997,grupo_edad
+C1 · Sin consumo reciente de alcohol,Edad 50-65,2126764,0.23381927403537472,grupo_edad
+C1 · Sin consumo reciente de alcohol,Edad 66-75,907106,0.0997284449018004,grupo_edad
+C2 · Consumo leve,Edad 16-24,694102,0.17648071367059248,grupo_edad
+C2 · Consumo leve,Edad 25-34,593385,0.1508726502465409,grupo_edad
+C2 · Consumo leve,Edad 35-49,1133327,0.2881570111916571,grupo_edad
+C2 · Consumo leve,Edad 50-65,1077982,0.2740851239213439,grupo_edad
+C2 · Consumo leve,Edad 66-75,434223,0.11040450096986565,grupo_edad
+C3 · Consumo moderado,Edad 16-24,451837,0.16394880339510967,grupo_edad
+C3 · Consumo moderado,Edad 25-34,856084,0.3106296018380501,grupo_edad
+C3 · Consumo moderado,Edad 35-49,850755,0.3086959771608047,grupo_edad
+C3 · Consumo moderado,Edad 50-65,467610,0.1696720276462247,grupo_edad
+C3 · Consumo moderado,Edad 66-75,129678,0.04705358995981079,grupo_edad
+C4 · Consumo intensivo y policonsumo,Edad 16-24,830532,0.28088794372582065,grupo_edad
+C4 · Consumo intensivo y policonsumo,Edad 25-34,877499,0.2967722974328068,grupo_edad
+C4 · Consumo intensivo y policonsumo,Edad 35-49,812123,0.2746619751225054,grupo_edad
+C4 · Consumo intensivo y policonsumo,Edad 50-65,388800,0.1314931062506912,grupo_edad
+C4 · Consumo intensivo y policonsumo,Edad 66-75,47855,0.016184677468175996,grupo_edad
+C5 · Uso de tranquilizantes,Edad 16-24,113492,0.08128879396171493,grupo_edad
+C5 · Uso de tranquilizantes,Edad 25-34,127674,0.09144667007602292,grupo_edad
+C5 · Uso de tranquilizantes,Edad 35-49,292873,0.20977067065475397,grupo_edad
+C5 · Uso de tranquilizantes,Edad 50-65,476585,0.34135463178236275,grupo_edad
+C5 · Uso de tranquilizantes,Edad 66-75,385534,0.2761392335251454,grupo_edad
+C1 · Sin consumo reciente de alcohol,Clima Bajo,4161674,0.4575399966577834,clima
+C1 · Sin consumo reciente de alcohol,Clima Medio,3421592,0.3761743933437118,clima
+C1 · Sin consumo reciente de alcohol,Clima Alto,1511569,0.16618391426334908,clima
+C1 · Sin consumo reciente de alcohol,Sin dato,925,1.0169573515572091e-4,clima
+C2 · Consumo leve,Clima Bajo,1093537,0.2780401010012919,clima
+C2 · Consumo leve,Clima Medio,1539667,0.3914720473000512,clima
+C2 · Consumo leve,Clima Alto,1299815,0.3304878516986569,clima
+C3 · Consumo moderado,Clima Bajo,854455,0.3100385200967792,clima
+C3 · Consumo moderado,Clima Medio,1047191,0.37997267018001685,clima
+C3 · Consumo moderado,Clima Alto,852929,0.30948481184805027,clima
+C3 · Consumo moderado,Sin dato,1389,5.039978751536667e-4,clima
+C4 · Consumo intensivo y policonsumo,Clima Bajo,1098196,0.37141255995906397,clima
+C4 · Consumo intensivo y policonsumo,Clima Medio,1156791,0.3912295315659551,clima
+C4 · Consumo intensivo y policonsumo,Clima Alto,700953,0.2370640105600328,clima
+C4 · Consumo intensivo y policonsumo,Sin dato,869,2.9389791494817554e-4,clima
+C5 · Uso de tranquilizantes,Clima Bajo,495359,0.3548015339238109,clima
+C5 · Uso de tranquilizantes,Clima Medio,499240,0.3575813052677419,clima
+C5 · Uso de tranquilizantes,Clima Alto,400695,0.2869983196744208,clima
+C5 · Uso de tranquilizantes,Sin dato,864,6.188411340263781e-4,clima
+C1 · Sin consumo reciente de alcohol,Hasta secundario incompleto,4135088,0.45461709631740505,nivel_ed3
+C1 · Sin consumo reciente de alcohol,Secundario completo o superior incompleto,3831754,0.4212681513144586,nivel_ed3
+C1 · Sin consumo reciente de alcohol,Superior completo,1128918,0.12411475236813636,nivel_ed3
+C2 · Consumo leve,Hasta secundario incompleto,1152739,0.2930926598625636,nivel_ed3
+C2 · Consumo leve,Secundario completo o superior incompleto,1700046,0.4322496280846851,nivel_ed3
+C2 · Consumo leve,Superior completo,1080234,0.27465771205275136,nivel_ed3
+C3 · Consumo moderado,Hasta secundario incompleto,838392,0.3042100695074391,nivel_ed3
+C3 · Consumo moderado,Secundario completo o superior incompleto,1359615,0.4933355442959342,nivel_ed3
+C3 · Consumo moderado,Superior completo,557957,0.20245438619662667,nivel_ed3
+C4 · Consumo intensivo y policonsumo,Hasta secundario incompleto,1107515,0.37456426843938856,nivel_ed3
+C4 · Consumo intensivo y policonsumo,Secundario completo o superior incompleto,1437201,0.4860648760200608,nivel_ed3
+C4 · Consumo intensivo y policonsumo,Superior completo,412093,0.13937085554055065,nivel_ed3
+C5 · Uso de tranquilizantes,Hasta secundario incompleto,588022,0.42117152929682744,nivel_ed3
+C5 · Uso de tranquilizantes,Secundario completo o superior incompleto,455528,0.32627252789440736,nivel_ed3
+C5 · Uso de tranquilizantes,Superior completo,352608,0.2525559428087652,nivel_ed3

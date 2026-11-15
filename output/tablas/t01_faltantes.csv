@@ -1,0 +1,4 @@
+variable,descripcion,condicion_salto,na_total,na_por_salto,na_no_respuesta,pct_no_respuesta
+AL_03,Edad de inicio de alcohol,Nunca tomó alcohol (PV_AL = 0),2754,2073,681,5.645829878958713
+AL19_TRAGOS_TOTAL,Tragos en el día que más tomó,No tomó en los últimos 30 días (P1M_AL = 0),6393,6166,227,1.8819432929862379
+CP_01,Preocupación por el consumo propio,"No consumió en 12 meses (aprox. con AL, TA, MA, TR)",3270,3215,55,0.4559774498424805

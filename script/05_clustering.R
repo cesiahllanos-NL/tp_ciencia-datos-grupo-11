@@ -253,7 +253,7 @@ graf_comp("sexo", "Sexo según cluster", "g12_clusters_sexo")
 # v > 1,96: la categoría está sobrerrepresentada en el cluster;
 # v < -1,96: subrepresentada.
 desc <- catdes(as.data.frame(datos[, c("cluster", suplementarias)]),
-               num.var = 1, row.w = datos$WPER)
+               num.var = 1, row.w = datos$WPER, html.table = FALSE)
 tabla_catdes <- imap_dfr(desc$category, function(m, cl) {
   if (is.null(m)) return(NULL)
   as.data.frame(m) %>%

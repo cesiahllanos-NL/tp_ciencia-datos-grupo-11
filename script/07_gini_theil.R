@@ -182,3 +182,4 @@ g_theil <- tabla_theil |>
 guardar(g_theil, "g15_theil_descomposicion", w = 10, h = 4.5)
 
 message("07_gini_theil.R terminado: tablas t14 y t15, gráficos g14 y g15.")
+
