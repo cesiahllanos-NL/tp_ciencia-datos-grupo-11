@@ -1,0 +1,1 @@
+Acá se guardan las bases procesadas (.rds) que generan los scripts de script/. No se editan a mano.

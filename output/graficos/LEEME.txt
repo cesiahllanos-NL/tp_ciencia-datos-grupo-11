@@ -1,0 +1,1 @@
+Acá se guardan los gráficos (.png y .jpg) que generan los scripts.

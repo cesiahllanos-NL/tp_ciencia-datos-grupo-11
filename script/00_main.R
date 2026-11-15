@@ -8,7 +8,7 @@
 #   2. Tener instalados los paquetes que se listan abajo.
 # =====================================================================
 
-paquetes <- c("tidyverse", "scales", "survey", "FactoMineR", "factoextra")
+paquetes <- c("tidyverse", "scales", "ggrepel", "survey", "FactoMineR", "factoextra")
 faltantes <- paquetes[!paquetes %in% rownames(installed.packages())]
 if (length(faltantes) > 0) {
   stop("Faltan paquetes: ", paste(faltantes, collapse = ", "),
@@ -23,5 +23,6 @@ source("script/04_chi_cuadrado.R")        # P1: chi², Rao-Scott y CMH
 source("script/05_clustering.R")          # P2: ACM + clasificación de Ward
 # 06_robustez_clusters.R                  # (pendiente) 4 y 6 clusters
 source("script/07_gini_theil.R")          # tercer método: Gini, Lorenz y Theil
+source("script/08_graficos_instancia3.R") # gráficos exploratorio y comunicativo (JPG)
 
 message("Todo listo. Gráficos en output/graficos y tablas en output/tablas.")

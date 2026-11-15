@@ -35,7 +35,8 @@ El trabajo es descriptivo y **no tiene carácter causal**.
 3. **Inferencia** (`04_chi_cuadrado.R`): chi² de independencia entre sexo y tranquilizantes, repetido por grupo de edad y nivel educativo, con Rao-Scott y Cochran-Mantel-Haenszel.
 4. **Perfiles de consumo** (`05_clustering.R`): análisis de correspondencias múltiples y clasificación jerárquica de Ward (5 clusters).
 5. **Concentración** (`07_gini_theil.R`): Gini, curva de Lorenz y descomposición del Theil de los tragos.
-6. **Pendientes:** descriptivas antes y después de la limpieza (`02_descriptivas.R`), robustez de los clusters (`06_robustez_clusters.R`) y los gráficos finales de la instancia 3.
+6. **Gráficos de la instancia 3** (`08_graficos_instancia3.R`): el exploratorio (alcohol y tabaco por sexo, edad y clima educativo) y el comunicativo (brecha de género en tranquilizantes).
+7. **Pendientes:** descriptivas antes y después de la limpieza (`02_descriptivas.R`) y robustez de los clusters (`06_robustez_clusters.R`).
 
 ## Estructura del repositorio
 
@@ -57,7 +58,7 @@ tp_g11/
 
 1. Clonar o descargar el repositorio.
 2. Abrir `tp_g11.Rproj` en RStudio (así todas las rutas son relativas).
-3. Instalar los paquetes: `tidyverse`, `scales`, `survey`, `FactoMineR`, `factoextra`.
+3. Instalar los paquetes: `tidyverse`, `scales`, `ggrepel`, `survey`, `FactoMineR`, `factoextra`.
 4. Correr `script/00_main.R`, o los scripts de a uno en este orden. Cada uno lee los archivos que dejó el anterior:
 
 | Script | Qué hace | Archivos que genera |
@@ -67,6 +68,7 @@ tp_g11/
 | `04_chi_cuadrado.R` | Chi², Rao-Scott y CMH | `output/tablas/t05` a `t07`, `output/graficos/g03`, `g04` |
 | `05_clustering.R` | ACM y clusters | `input/base_con_clusters.rds`, `output/tablas/t08` a `t13`, `output/graficos/g05` a `g13` |
 | `07_gini_theil.R` | Gini, Lorenz y Theil | `output/tablas/t14`, `t15`, `output/graficos/g14`, `g15` |
+| `08_graficos_instancia3.R` | Gráficos exploratorio y comunicativo | `output/graficos/grupo_11_exploratorio.jpg`, `grupo_11_comunicativo.jpg` |
 
 Las funciones propias están en `utils/` (`guardar`, `coma`, `fmt_p`, `pct`, `calcular_gini`, `calcular_theil`, `descomponer_theil`) y se cargan con `source()`.
 
