@@ -113,7 +113,7 @@ g_lorenz <- ggplot(curvas, aes(x = prop_personas, y = prop_tragos,
   labs(
     title    = "Concentración de los tragos en el día de mayor consumo",
     subtitle = paste0("Personas de 16 a 75 años que tomaron alcohol en los últimos ",
-                      "30 días (n = ", format(nrow(bebedores), big.mark = "."), ").\n",
+                      "30 días (n = ", format(nrow(bebedores), big.mark = ".", decimal.mark = ","), ").\n",
                       "La winsorización de los valores extremos casi no cambia la curva."),
     x = "Proporción acumulada de personas (de menos a más tragos)",
     y = "Proporción acumulada de los tragos",
@@ -143,10 +143,20 @@ particiones <- list(
   "Clima educativo del hogar" = base_comun$clima
 )
 
-tabla_theil <- imap(particiones, function(grupo, nombre) {
-  r <- descomponer_theil(base_comun$tragos, base_comun$WPER, grupo)
-  tibble(particion = nombre, T_observado = r$T_observado,
-         T_entre = r$T_entre, T_dentro = r$T_dentro)
+# Theil es muy sensible a los valores extremos: se calcula con los tragos originales
+# y con los winsorizados al p99, para ver si la conclusión depende de los extremos.
+versiones_theil <- list(
+  "Original"           = base_comun$tragos,
+  "Winsorizada al p99" = base_comun$tragos_wins
+)
+
+tabla_theil <- imap(versiones_theil, function(x, version) {
+  imap(particiones, function(grupo, nombre) {
+    r <- descomponer_theil(x, base_comun$WPER, grupo)
+    tibble(version = version, particion = nombre, T_observado = r$T_observado,
+           T_entre = r$T_entre, T_dentro = r$T_dentro)
+  }) |>
+    bind_rows()
 }) |>
   bind_rows() |>
   mutate(pct_entre  = T_entre  / T_observado,
@@ -157,29 +167,31 @@ stopifnot(all(abs(tabla_theil$T_observado -
                     (tabla_theil$T_entre + tabla_theil$T_dentro)) < 1e-8))
 
 write_csv(tabla_theil, "output/tablas/t15_theil_descomposicion.csv")
-tabla_theil   # DEBERÍAS VER: pct_entre de pocos puntos (sexo ~2%, edad ~8%, clima ~1%)
+tabla_theil
 
 g_theil <- tabla_theil |>
-  ggplot(aes(x = pct_entre, y = reorder(particion, pct_entre))) +
-  geom_col(fill = "#1F3A5F", width = 0.6) +
-  geom_text(aes(label = pct(pct_entre)), hjust = -0.15, size = 3.8) +
+  ggplot(aes(x = pct_entre, y = reorder(particion, pct_entre), fill = version)) +
+  geom_col(position = position_dodge(width = 0.7), width = 0.6) +
+  geom_text(aes(label = pct(pct_entre)), position = position_dodge(width = 0.7),
+            hjust = -0.15, size = 3.5) +
+  scale_fill_manual(values = c("Original" = "#1F3A5F", "Winsorizada al p99" = "#9CA3AF")) +
   scale_x_continuous(labels = label_percent(accuracy = 1, decimal.mark = ","),
                      limits = c(0, max(tabla_theil$pct_entre) * 1.3)) +
   labs(
     title    = "¿Cuánta desigualdad en los tragos explica cada variable?",
     subtitle = paste0("Porcentaje del índice de Theil que corresponde a diferencias ENTRE grupos; ",
-                      "el resto\nocurre DENTRO de los grupos. Mismas ", format(nrow(base_comun), big.mark = "."),
-                      " personas en las tres barras."),
+                      "el resto\nocurre DENTRO de los grupos. Mismas ", format(nrow(base_comun), big.mark = ".", decimal.mark = ","),
+                      " personas en todas las barras."),
     x = "% del Theil total explicado por diferencias entre grupos",
-    y = NULL,
+    y = NULL, fill = NULL,
     caption = fuente
   ) +
   theme_minimal(base_size = 11) +
-  theme(panel.grid.minor = element_blank(),
+  theme(legend.position = "bottom",
+        panel.grid.minor = element_blank(),
         panel.grid.major.y = element_blank(),
         plot.title.position = "plot")
 
-guardar(g_theil, "g15_theil_descomposicion", w = 10, h = 4.5)
+guardar(g_theil, "g15_theil_descomposicion", w = 10, h = 5.2)
 
 message("07_gini_theil.R terminado: tablas t14 y t15, gráficos g14 y g15.")
-

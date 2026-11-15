@@ -87,7 +87,7 @@ g_outliers <- ggplot(comparacion, aes(x = version, y = valor)) +
   facet_wrap(~ version, scales = "free") +
   labs(title = "Tragos en el día que más tomó: tres tratamientos de los valores extremos",
        subtitle = paste0("Personas que tomaron en los últimos 30 días (n = ",
-                         format(nrow(t_bebedores), big.mark = "."),
+                         format(nrow(t_bebedores), big.mark = ".", decimal.mark = ","),
                          "). Percentil 99 = ", coma(p99_tragos), " tragos."),
        x = NULL, y = NULL) +
   theme_minimal(base_size = 13) +

@@ -118,14 +118,18 @@ tabla_estratos <- bind_rows(
   chi_educ %>% mutate(estrato = as.character(estrato))
 ) %>%
   mutate(brecha_pp = 100 * (prev_mujeres - prev_varones),
-         significativo = p_valor < 0.05)
+         significativo = p_valor < 0.05,
+         # Son 8 tests: corregimos por comparaciones múltiples con el método de Holm
+         # (menos conservador que Bonferroni y con el mismo control del error global)
+         p_holm = p.adjust(p_valor, method = "holm"),
+         significativo_holm = p_holm < 0.05)
 write_csv(tabla_estratos, "output/tablas/t06_chi2_por_estrato.csv")
 print(tabla_estratos, width = Inf)
 
 # Resumen conjunto controlando por edad: test de Cochran-Mantel-Haenszel
 # (sigue siendo un test chi² de independencia, pero estratificado).
-cmh_edad <- mantelhaen.test(table(d_tr$sexo, d_tr$tranq, d_tr$grupo_edad))
-cmh_educ <- mantelhaen.test(table(d_tr$sexo, d_tr$tranq, d_tr$nivel_ed3))
+cmh_edad <- mantelhaen.test(table(d_tr$sexo, d_tr$tranq, d_tr$grupo_edad) * 1)
+cmh_educ <- mantelhaen.test(table(d_tr$sexo, d_tr$tranq, d_tr$nivel_ed3) * 1)
 print(cmh_edad)
 print(cmh_educ)
 
@@ -139,6 +143,26 @@ tabla_cmh <- tibble(
   mutate(or_comun_mujer_vs_varon = 1 / or_comun_varon_vs_mujer)
 write_csv(tabla_cmh, "output/tablas/t07_cmh.csv")
 print(tabla_cmh)
+
+# Chequeo de robustez: modelo logístico conjunto y ponderado.
+# El CMH controla por edad y por educación de a una variable y sobre la muestra.
+# Acá se controlan las dos a la vez y se usa el ponderador WPER (svyglm).
+d_modelo <- d_tr %>% mutate(consumio = as.numeric(P1A_TR == 1))
+diseno_modelo <- svydesign(ids = ~1, weights = ~WPER, data = d_modelo)
+modelo_conjunto <- svyglm(consumio ~ sexo + grupo_edad + nivel_ed3,
+                          design = diseno_modelo, family = quasibinomial())
+coef_mujer <- summary(modelo_conjunto)$coefficients["sexoMujer", ]
+ic_mujer   <- confint(modelo_conjunto)["sexoMujer", ]
+
+tabla_modelo <- tibble(
+  modelo = "Logístico ponderado: sexo + grupo de edad + nivel educativo",
+  or_mujer_vs_varon = exp(unname(coef_mujer["Estimate"])),
+  ic95_inferior     = exp(unname(ic_mujer[1])),
+  ic95_superior     = exp(unname(ic_mujer[2])),
+  p_valor           = unname(coef_mujer["Pr(>|t|)"])
+)
+write_csv(tabla_modelo, "output/tablas/t25_modelo_logistico_ponderado.csv")
+print(tabla_modelo)
 
 # ---- 5. Gráficos -----------------------------------------------------
 colores_sexo <- c("Varón" = "#3182bd", "Mujer" = "#de2d26")

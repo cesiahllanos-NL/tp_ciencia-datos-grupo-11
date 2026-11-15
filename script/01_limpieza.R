@@ -107,6 +107,9 @@ base <- base %>%
 # La devolución pidió cuidar los outliers de tragos por día (máx. 135).
 # Generamos tres versiones y la usada en el clustering es la categórica,
 # que no se ve afectada por los valores extremos.
+# El p99 se calcula SIN ponderar a propósito: detectar valores extremos es un control de
+# calidad de cada registro, no una estimación para la población. Con ponderadores
+# daría 33,0 en vez de 34,1 y no cambia ninguna conclusión.
 p99_tragos <- quantile(base$AL19_TRAGOS_TOTAL, 0.99, na.rm = TRUE)
 
 base <- base %>%

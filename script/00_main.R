@@ -21,8 +21,11 @@ source("script/02_descriptivas.R")        # descriptivas antes y después de la 
 source("script/03_faltantes_outliers.R")  # diagnóstico de faltantes y outliers
 source("script/04_chi_cuadrado.R")        # P1: chi², Rao-Scott y CMH
 source("script/05_clustering.R")          # P2: ACM + clasificación de Ward
-# 06_robustez_clusters.R                  # (pendiente) 4 y 6 clusters
+source("script/06_robustez_clusters.R")  # robustez: 4, 5 y 6 clusters y sin intensidad
 source("script/07_gini_theil.R")          # tercer método: Gini, Lorenz y Theil
 source("script/08_graficos_instancia3.R") # gráficos exploratorio y comunicativo (JPG)
+
+# Registro de versiones de R y de los paquetes, para poder reproducir el análisis
+writeLines(capture.output(sessionInfo()), "output/session_info.txt")
 
 message("Todo listo. Gráficos en output/graficos y tablas en output/tablas.")

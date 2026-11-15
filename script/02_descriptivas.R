@@ -9,7 +9,7 @@
 #
 # Qué lee:  raw/base_encoprac_2022.txt (solo para el "antes") e
 #           input/base_limpia.rds (el "después", lo genera 01_limpieza.R).
-# Qué guarda: output/tablas/t16 a t19 y output/graficos/g16 y g17.
+# Qué guarda: output/tablas/t16 a t19 y t22 a t24, y output/graficos/g16, g17 y g19 a g22.
 # Todo se pondera con WPER, salvo donde se indica "sin ponderar".
 # =====================================================================
 
@@ -234,4 +234,147 @@ print(tabla_muestras)
 # o dos puntos como máximo: alcohol en 12 meses baja de 66,2% a 65,1% y el clima
 # alto de 24,2% a 23,7%. Los demás indicadores casi no cambian.
 
-message("02_descriptivas.R terminado: tablas t16 a t19 y gráficos g16 y g17.")
+
+# ---- 6. Distribuciones de las variables principales -------------------------
+# Edad, nivel educativo, consumo mensual de alcohol por edad y sexo, y edad de
+# inicio del consumo de alcohol. Todo ponderado con WPER.
+col_varon  <- "#1F3A5F"   # mismos colores que los gráficos de la instancia 3
+col_mujer  <- "#C2185B"
+col_neutro <- "#4F7CAC"
+
+# 6a. Edad ---------------------------------------------------------------------
+mediana_edad <- mediana_ponderada(base$EDAD_SEL, base$WPER)
+
+g_edad <- ggplot(base, aes(x = EDAD_SEL, weight = WPER)) +
+  geom_histogram(binwidth = 5, boundary = 16, closed = "left",
+                 fill = col_neutro, color = "white") +
+  geom_vline(xintercept = mediana_edad, linetype = "dashed", color = "grey30") +
+  annotate("text", x = mediana_edad + 1, y = Inf, vjust = 2, hjust = 0, size = 3.6,
+           color = "grey20", label = paste0("Mediana: ", coma(mediana_edad, 0), " años")) +
+  scale_x_continuous(breaks = seq(20, 70, 10)) +
+  scale_y_continuous(labels = label_number(scale = 1e-6, accuracy = 0.1, decimal.mark = ","),
+                     expand = expansion(mult = c(0, 0.08))) +
+  coord_cartesian(xlim = c(16, 76)) +
+  labs(title    = "Edad de la población de 16 a 75 años",
+       subtitle = "Tramos de 5 años, ponderado",
+       x = "Edad (años)", y = "Personas (millones)", caption = fuente) +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
+        plot.title.position = "plot")
+
+guardar(g_edad, "g19_edad_distribucion", w = 10, h = 5.4)
+
+# 6b. Nivel educativo ----------------------------------------------------------
+# Codificación de la EPH: 1 primaria incompleta, 2 primaria completa, 3 secundaria
+# incompleta, 4 secundaria completa, 5 superior incompleta, 6 superior completa,
+# 7 sin instrucción. Se muestran de menor a mayor nivel.
+niveles_ed7 <- c("7" = "Sin instrucción", "1" = "Primaria incompleta",
+                 "2" = "Primaria completa", "3" = "Secundaria incompleta",
+                 "4" = "Secundaria completa", "5" = "Superior incompleta",
+                 "6" = "Superior completa")
+
+dist_educ <- base %>%
+  mutate(nivel = factor(as.character(NIVEL_EDUCATIVO_SEL),
+                        levels = names(niveles_ed7), labels = unname(niveles_ed7))) %>%
+  group_by(nivel) %>%
+  summarise(n = n(), poblacion = sum(WPER), .groups = "drop") %>%
+  mutate(proporcion = poblacion / sum(poblacion))
+
+write_csv(dist_educ, "output/tablas/t22_distribucion_educacion.csv")
+print(dist_educ)
+# DEBERÍAS VER (ponderado): sin instrucción 0,5% · primaria incompleta 4,4% ·
+# primaria completa 12,7% · secundaria incompleta 21,0% · secundaria completa 26,1% ·
+# superior incompleta 17,3% · superior completa 17,9%.
+
+g_educ <- ggplot(dist_educ, aes(x = proporcion, y = fct_rev(nivel))) +
+  geom_col(fill = col_neutro, width = 0.7) +
+  geom_text(aes(label = pct(proporcion)), hjust = -0.15, size = 3.6) +
+  scale_x_continuous(labels = label_percent(accuracy = 1, decimal.mark = ","),
+                     limits = c(0, max(dist_educ$proporcion) * 1.2),
+                     expand = expansion(mult = c(0, 0))) +
+  labs(title    = "Nivel educativo de la población de 16 a 75 años",
+       subtitle = "Porcentaje de la población, ponderado",
+       x = "% de la población", y = NULL, caption = fuente) +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank(),
+        plot.title.position = "plot")
+
+guardar(g_educ, "g20_nivel_educativo", w = 10, h = 5.4)
+
+# 6c. Alcohol en los últimos 30 días, por grupo de edad y sexo --------------------
+alcohol_edad_sexo <- base %>%
+  filter(!is.na(grupo_edad), !is.na(sexo), !is.na(P1M_AL)) %>%
+  group_by(grupo_edad, sexo) %>%
+  summarise(prevalencia = weighted.mean(P1M_AL, WPER), n = n(), .groups = "drop") %>%
+  group_by(grupo_edad) %>%
+  mutate(es_mayor = prevalencia == max(prevalencia)) %>%
+  ungroup()
+
+write_csv(alcohol_edad_sexo %>% select(-es_mayor), "output/tablas/t23_alcohol_edad_sexo.csv")
+print(alcohol_edad_sexo)
+# DEBERÍAS VER: los varones están por encima de las mujeres en los cinco grupos.
+# Varones 55,4 · 69,2 · 64,2 · 61,9 · 53,7 y mujeres 49,1 · 49,0 · 41,2 · 33,2 · 26,7
+# (de 16-24 a 66-75). El máximo es a los 25-34 años.
+
+g_alcohol <- ggplot(alcohol_edad_sexo, aes(x = grupo_edad, y = prevalencia,
+                                           color = sexo, group = sexo)) +
+  geom_line(linewidth = 1.2) +
+  geom_point(size = 3) +
+  geom_text(aes(label = pct(prevalencia), vjust = if_else(es_mayor, -1, 1.9)),
+            size = 3.5, show.legend = FALSE) +
+  geom_text(data = alcohol_edad_sexo %>% filter(grupo_edad == "66-75"),
+            aes(label = if_else(sexo == "Varón", "Varones", "Mujeres")),
+            hjust = -0.3, size = 4.2, fontface = "bold", show.legend = FALSE) +
+  scale_color_manual(values = c("Varón" = col_varon, "Mujer" = col_mujer), guide = "none") +
+  scale_x_discrete(expand = expansion(add = c(0.3, 1.1))) +
+  scale_y_continuous(labels = label_percent(accuracy = 1, decimal.mark = ","),
+                     limits = c(0, 0.8), breaks = seq(0, 0.8, 0.2)) +
+  labs(title    = "El consumo mensual de alcohol es mayor entre los varones en todas las edades",
+       subtitle = "Porcentaje que tomó alcohol en los últimos 30 días, ponderado",
+       x = "Grupo de edad (años)", y = "% que tomó alcohol (30 días)", caption = fuente) +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
+        plot.title.position = "plot")
+
+guardar(g_alcohol, "g21_alcohol_edad_sexo", w = 10, h = 5.8)
+
+# 6d. Edad de inicio del consumo de alcohol --------------------------------------
+# Solo quienes recuerdan y contestan (los códigos 998/999 son NA desde 01_limpieza.R)
+inicio <- base %>% filter(!is.na(AL_03), !is.na(WPER))
+
+tabla_inicio <- tibble(
+  n               = nrow(inicio),
+  mediana_pond    = mediana_ponderada(inicio$AL_03, inicio$WPER),
+  p25_pond        = percentil_ponderado(inicio$AL_03, inicio$WPER, 0.25),
+  p75_pond        = percentil_ponderado(inicio$AL_03, inicio$WPER, 0.75),
+  minimo          = min(inicio$AL_03),
+  maximo          = max(inicio$AL_03),
+  casos_menor_10  = sum(inicio$AL_03 < 10)
+)
+write_csv(tabla_inicio, "output/tablas/t24_edad_inicio_alcohol.csv")
+print(tabla_inicio)
+# DEBERÍAS VER: 9.308 personas, mediana 17 años (rango intercuartílico 16 a 19),
+# mínimo 4, máximo 71 y 28 casos que empezaron antes de los 10 años.
+
+g_inicio <- ggplot(inicio, aes(x = AL_03, weight = WPER)) +
+  geom_histogram(binwidth = 1, boundary = 0, closed = "left",
+                 fill = col_neutro, color = "white") +
+  geom_vline(xintercept = 10, linetype = "dashed", color = "grey40") +
+  annotate("text", x = 10.5, y = Inf, vjust = 2, hjust = 0, size = 3.6, color = "grey20",
+           label = paste0(tabla_inicio$casos_menor_10, " personas empezaron antes de los 10 años")) +
+  annotate("text", x = 10.5, y = Inf, vjust = 4.2, hjust = 0, size = 3.6, color = "grey20",
+           label = paste0("Mediana: ", coma(tabla_inicio$mediana_pond, 0), " años")) +
+  scale_y_continuous(labels = label_number(scale = 1e-6, accuracy = 0.1, decimal.mark = ","),
+                     expand = expansion(mult = c(0, 0.08))) +
+  coord_cartesian(xlim = c(0, 50)) +
+  labs(title    = "Edad de inicio del consumo de alcohol",
+       subtitle = "Personas que tomaron alcohol alguna vez y recuerdan cuándo empezaron, ponderado",
+       x = "Edad de inicio (años)", y = "Personas (millones)",
+       caption = paste0(fuente, "\nSe muestran hasta los 50 años; el máximo es ", tabla_inicio$maximo, ".")) +
+  theme_minimal(base_size = 11) +
+  theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
+        plot.title.position = "plot")
+
+guardar(g_inicio, "g22_edad_inicio_alcohol", w = 10, h = 5.4)
+
+message("02_descriptivas.R terminado: tablas t16 a t19 y t22 a t24, gráficos g16, g17 y g19 a g22.")

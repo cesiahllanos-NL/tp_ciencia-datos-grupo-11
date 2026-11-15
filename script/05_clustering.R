@@ -138,7 +138,8 @@ nombres <- datos %>%
       intensidad_modal == "Intensidad: No tomó en 30 días" ~ "Sin consumo reciente de alcohol",
       intensidad_modal == "Intensidad: Menos de 3 tragos" ~ "Consumo leve",
       intensidad_modal == "Intensidad: 3 a 4,9 tragos" ~ "Consumo moderado",
-      TRUE ~ "Consumo intensivo y policonsumo"
+      intensidad_modal == "Intensidad: 5 o más tragos" ~ "Consumo intensivo y policonsumo",
+      TRUE ~ NA_character_   # si algún grupo no encaja, se ve en vez de etiquetarse mal
     ),
     orden = match(nombre, c("Sin consumo reciente de alcohol", "Consumo leve",
                             "Consumo moderado", "Consumo intensivo y policonsumo",
@@ -146,6 +147,9 @@ nombres <- datos %>%
   ) %>%
   arrange(orden, cluster_num) %>%
   mutate(cluster = paste0("C", row_number(), " · ", nombre))
+if (anyNA(nombres$nombre) || anyDuplicated(nombres$nombre) > 0) {
+  warning("Los nombres de los clusters no son únicos o hay NA: revisar la tabla 'nombres'.")
+}
 print(nombres)
 
 datos <- datos %>%
@@ -252,6 +256,9 @@ graf_comp("sexo", "Sexo según cluster", "g12_clusters_sexo")
 # 4d. Categorías que caracterizan a cada cluster (test v de catdes).
 # v > 1,96: la categoría está sobrerrepresentada en el cluster;
 # v < -1,96: subrepresentada.
+# html.table = FALSE: las versiones nuevas de FactoMineR arman por defecto
+# tablas HTML en el panel Viewer, y eso falla al correr el script de corrido.
+# Acá solo necesitamos el resultado como lista, que guardamos en un CSV.
 desc <- catdes(as.data.frame(datos[, c("cluster", suplementarias)]),
                num.var = 1, row.w = datos$WPER, html.table = FALSE)
 tabla_catdes <- imap_dfr(desc$category, function(m, cl) {
