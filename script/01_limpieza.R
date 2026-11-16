@@ -42,9 +42,15 @@ if (length(faltan) > 0) {
 base <- base_raw %>% select(all_of(vars))
 
 # ---- Códigos especiales -> NA ----------------------------------------
-# Igual que en la primera entrega: 98/99, 998/999, 777/888 = no responde
-# o casos especiales según el manual del INDEC. En la base aparecen 998/999
-# en AL_03 (681 casos) y 777/888 en AL19_TRAGOS_TOTAL (227 casos).
+# Códigos según el diccionario de registro del INDEC:
+#   AL_03 (edad de inicio): 998 = no recuerda, 999 = no sabe/no contesta (681 casos).
+#   AL19_TRAGOS_TOTAL: 777 = "no consume de forma excesiva" (182 casos) y
+#                      888 = "no se pueden calcular los tragos consumidos" (45 casos).
+# Ninguno es una cantidad de tragos, así que pasan a NA. Ojo: el 777 NO es
+# no respuesta: son personas que tomaron en los últimos 30 días sin consumo
+# excesivo (177 de las 182 nunca tomaron 5 o más tragos en una ocasión, AL_20).
+# Como no tienen un valor de tragos, quedan fuera del Gini, del Theil y del
+# clustering; la tabla t19 muestra que su exclusión casi no cambia la muestra.
 codigos_especiales <- c(98, 99, 998, 999, 777, 888)
 
 binarias <- c("PV_AL", "P1A_AL", "P1M_AL", "PV_TA", "P1A_TA", "P1M_TA",

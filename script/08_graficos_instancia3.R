@@ -230,7 +230,9 @@ round(100 * brecha$dif, 1)
 p_chi <- datos %>%
   group_by(edad) %>%
   summarise(p = chisq.test(table(sexo, P1A_TR))$p.value)
-stopifnot(all(p_chi$p < 0.05))   # si no corta, la brecha es significativa en los 5 grupos
+p_chi   # sin ponderar, la brecha es significativa en los 5 grupos de edad...
+# ...pero con el ponderador (Rao-Scott, tabla t06) no lo es en 25-34 ni en 35-49.
+# Por eso el pie del gráfico se apoya en el OR común, que usa todas las edades a la vez.
 
 # OR común mujer/varón controlando por edad (Cochran-Mantel-Haenszel).
 # Con las columnas en orden 0/1 de P1A_TR, la estimación ya es mujer sobre varón.
@@ -291,10 +293,10 @@ g_comu <- ggplot(tranq, aes(x = x, y = p)) +
                       "según sexo y grupo de edad.\nPoblación de 16 a 75 años de 31 aglomerados urbanos, 2022."),
     x        = "Grupo de edad (años)",
     y        = "% que consumió en los últimos 12 meses",
-    caption  = paste0(fuente, "\nPrevalencias ponderadas con WPER. La diferencia entre sexos es significativa ",
-                      "dentro de cada grupo de edad (chi², p < 0,05).\n",
+    caption  = paste0(fuente, " Prevalencias ponderadas con WPER.\n",
                       "Controlando por edad, las mujeres tienen ", or_txt,
-                      " veces las chances de los varones (OR común de Cochran-Mantel-Haenszel).")
+                      " veces las chances de los varones (OR común de Cochran-Mantel-Haenszel, p < 0,001).\n",
+                      "La brecha relativa es parecida en todas las edades; en puntos porcentuales crece con la edad.")
   ) +
   theme_minimal(base_size = 13) +
   theme(

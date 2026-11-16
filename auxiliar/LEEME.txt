@@ -1,5 +1,5 @@
 diccionario_variables.csv
-  Las 23 variables de la ENCoPraC 2022 que se usan en el trabajo (de 562 originales).
-  Es un borrador armado desde los scripts de limpieza: las filas con "verificar"
-  hay que contrastarlas con el diseño de registro del INDEC antes de la entrega.
-  Este archivo sirve de base para la tabla de variables de la presentación.
+  Las 23 variables de la ENCoPraC 2022 que se usan en el trabajo (de 562 originales):
+  descripción, tipo, valores posibles y en qué parte del análisis se usa cada una.
+  Descripciones y códigos verificados contra el diccionario de registro del INDEC.
+  Es la base de la tabla de variables de la presentación.

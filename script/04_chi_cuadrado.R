@@ -96,6 +96,11 @@ chi_por_estrato <- function(datos, var_estrato, nombre_control) {
       prev <- df %>%
         group_by(sexo) %>%
         summarise(p = weighted.mean(tranq == "Consumió", WPER), .groups = "drop")
+      # Mismo test con el ponderador WPER (Rao-Scott), como en el test general.
+      # Es más exigente: dentro de cada estrato hay menos casos y el ponderador
+      # agranda la varianza, así que algunos estratos dejan de ser significativos.
+      rs <- svychisq(~ sexo + tranq, svydesign(ids = ~1, weights = ~WPER, data = df),
+                     statistic = "F")
       tibble(
         n = nrow(df),
         prev_varones = prev$p[prev$sexo == "Varón"],
@@ -103,7 +108,8 @@ chi_por_estrato <- function(datos, var_estrato, nombre_control) {
         chi2 = unname(t$statistic),
         p_valor = t$p.value,
         v_cramer = sqrt(unname(t$statistic) / nrow(df)),
-        metodo = if (ok) "Chi² asintótico" else "Chi² con p-valor simulado"
+        metodo = if (ok) "Chi² asintótico" else "Chi² con p-valor simulado",
+        p_rao_scott = unname(rs$p.value)
       )
     }) %>%
     ungroup() %>%

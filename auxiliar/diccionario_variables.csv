@@ -19,6 +19,6 @@ P1M_MA,Consumió marihuana en los últimos 30 días,Binaria,0 = no; 1 = sí,Desc
 PV_TR,Consumió tranquilizantes alguna vez en la vida (con o sin receta),Binaria,0 = no; 1 = sí,Descriptivas,
 P1A_TR,Consumió tranquilizantes en los últimos 12 meses (con o sin receta),Binaria,0 = no; 1 = sí,"P1 (chi², CMH); ACM",
 AL_03,Edad de inicio del consumo de alcohol,Numérica,998/999 = no recuerda o no responde,No se usa en los métodos (ver faltantes),
-AL19_TRAGOS_TOTAL,"Tragos en el día que más tomó, últimos 30 días",Numérica,777/888 = códigos especiales (227 casos); máximo 135,"Clusters (categorizada), Gini y Theil",Confirmar el texto exacto de la pregunta en el diseño de registro
-CP_01,Preocupación por el propio consumo,Categórica,1 = sí; 2 = no; 98 = Ns/Nc; vacío = salto de cuestionario,Descripción de clusters,
-CP_10,COMPLETAR,COMPLETAR,COMPLETAR,No se usa en los métodos,Completar con el diseño de registro del INDEC
+AL19_TRAGOS_TOTAL,"Total de tragos de bebidas alcohólicas en el día que más tomó, últimos 30 días",Numérica,"777 = no consume de forma excesiva (182 casos); 888 = no se pueden calcular los tragos (45 casos); vacío = no tomó en 30 días; máximo 135","Clusters (categorizada), Gini y Theil",
+CP_01,Preocupación por el propio consumo de alguna sustancia (últimos 12 meses),Categórica,1 = sí; 2 = no; 98 = Ns/Nc; vacío = salto de cuestionario,Descripción de clusters,
+CP_10,Preocupación por el consumo de un familiar/amigo/conocido (últimos 12 meses),Categórica,1 = sí; 2 = no; 99 = no contesta,No se usa en los métodos,

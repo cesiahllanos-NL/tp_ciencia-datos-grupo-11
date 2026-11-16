@@ -1,0 +1,2 @@
+modelo,or_mujer_vs_varon,ic95_inferior,ic95_superior,p_valor
+Logístico ponderado: sexo + grupo de edad + nivel educativo,1.8671619525012348,1.3983035587099872,2.4932309834672264,2.324840903895523e-5
