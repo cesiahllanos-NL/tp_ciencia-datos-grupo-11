@@ -8,6 +8,7 @@ library(tidyverse)
 
 # Funciones propias (carpeta utils/)
 source("utils/guardar.R")
+source("utils/estilo_graficos.R")   # fuente, tema y colores comunes
 source("utils/coma.R")
 
 base <- readRDS("input/base_limpia.rds")
@@ -83,14 +84,14 @@ comparacion <- t_bebedores %>%
                                                "Logaritmo (1 + x)")))
 
 g_outliers <- ggplot(comparacion, aes(x = version, y = valor)) +
-  geom_boxplot(fill = "#9ecae1", outlier.alpha = 0.4, width = 0.5) +
+  geom_boxplot(fill = color_secundario, outlier.alpha = 0.4, width = 0.5) +
   facet_wrap(~ version, scales = "free") +
   labs(title = "Tragos en el día que más tomó: tres tratamientos de los valores extremos",
        subtitle = paste0("Personas que tomaron en los últimos 30 días (n = ",
                          format(nrow(t_bebedores), big.mark = ".", decimal.mark = ","),
                          "). Percentil 99 = ", coma(p99_tragos), " tragos."),
-       x = NULL, y = NULL) +
-  theme_minimal(base_size = 13) +
+       caption = fuente, x = NULL, y = NULL) +
+  tema_g11(base_size = 13) +
   theme(axis.text.x = element_blank(), strip.text = element_text(face = "bold"))
 guardar(g_outliers, "g01_outliers_tragos")
 
@@ -102,14 +103,14 @@ dist_tragos_cat <- base %>%
 write_csv(dist_tragos_cat, "output/tablas/t04_tragos_categorica.csv")
 
 g_tragos_cat <- ggplot(dist_tragos_cat, aes(x = tragos_cat, y = pct)) +
-  geom_col(fill = "#3182bd", width = 0.6) +
+  geom_col(fill = color_principal, width = 0.6) +
   geom_text(aes(label = paste0(coma(100 * pct), "%")), vjust = -0.4, size = 4.5) +
   scale_y_continuous(labels = function(x) paste0(coma(100 * x, 0), "%"),
                      expand = expansion(mult = c(0, 0.1))) +
   labs(title = "Intensidad de consumo de alcohol (versión categórica)",
-       subtitle = "Población de 16 a 75 años, ponderado por WPER",
-       x = NULL, y = NULL) +
-  theme_minimal(base_size = 13)
+       subtitle = "Población de 16 a 75 años, distribución ponderada",
+       caption = fuente, x = NULL, y = NULL) +
+  tema_g11(base_size = 13)
 guardar(g_tragos_cat, "g02_tragos_categorica")
 
 message("Listo: tablas t01-t04 y gráficos g01-g02.")

@@ -18,6 +18,7 @@ library(scales)
 
 # Funciones propias (carpeta utils/)
 source("utils/guardar.R")
+source("utils/estilo_graficos.R")   # fuente, tema y colores comunes
 source("utils/coma.R")
 source("utils/pct.R")
 source("utils/leer_base_encoprac.R")
@@ -30,8 +31,6 @@ dir.create("output/tablas", recursive = TRUE, showWarnings = FALSE)
 base       <- readRDS("input/base_limpia.rds")
 base_cruda <- leer_base_encoprac("raw/base_encoprac_2022.txt")
 
-fuente <- paste0("Fuente: elaboración propia en base a la ENCoPraC 2022 ",
-                 "(INDEC-SEDRONAR). Ponderado por WPER.")
 
 
 # ---- 1. Variables numéricas: antes y después de la limpieza --------------
@@ -109,7 +108,7 @@ g_antes_despues <- ggplot(tragos_etapas, aes(x = etapa, y = media_pond, fill = e
     x = NULL, y = "Tragos (media ponderada)",
     caption = paste0(fuente, "\nLos códigos 777 y 888 de la base original no son cantidades de tragos.")
   ) +
-  theme_minimal(base_size = 11) +
+  tema_g11(base_size = 11) +
   theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
         plot.title.position = "plot")
 
@@ -190,7 +189,7 @@ g_prev <- prev_consumo %>%
     subtitle = "Porcentaje de la población de 16 a 75 años de 31 aglomerados urbanos",
     x = "% de la población", y = NULL, fill = NULL, caption = fuente
   ) +
-  theme_minimal(base_size = 11) +
+  tema_g11(base_size = 11) +
   theme(legend.position = "bottom", panel.grid.minor = element_blank(),
         panel.grid.major.y = element_blank(), plot.title.position = "plot")
 
@@ -258,7 +257,7 @@ g_edad <- ggplot(base, aes(x = EDAD_SEL, weight = WPER)) +
   labs(title    = "Edad de la población de 16 a 75 años",
        subtitle = "Tramos de 5 años, ponderado",
        x = "Edad (años)", y = "Personas (millones)", caption = fuente) +
-  theme_minimal(base_size = 11) +
+  tema_g11(base_size = 11) +
   theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
         plot.title.position = "plot")
 
@@ -295,7 +294,7 @@ g_educ <- ggplot(dist_educ, aes(x = proporcion, y = fct_rev(nivel))) +
   labs(title    = "Nivel educativo de la población de 16 a 75 años",
        subtitle = "Porcentaje de la población, ponderado",
        x = "% de la población", y = NULL, caption = fuente) +
-  theme_minimal(base_size = 11) +
+  tema_g11(base_size = 11) +
   theme(panel.grid.minor = element_blank(), panel.grid.major.y = element_blank(),
         plot.title.position = "plot")
 
@@ -332,7 +331,7 @@ g_alcohol <- ggplot(alcohol_edad_sexo, aes(x = grupo_edad, y = prevalencia,
   labs(title    = "El consumo mensual de alcohol es mayor entre los varones en todas las edades",
        subtitle = "Porcentaje que tomó alcohol en los últimos 30 días, ponderado",
        x = "Grupo de edad (años)", y = "% que tomó alcohol (30 días)", caption = fuente) +
-  theme_minimal(base_size = 11) +
+  tema_g11(base_size = 11) +
   theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
         plot.title.position = "plot")
 
@@ -371,7 +370,7 @@ g_inicio <- ggplot(inicio, aes(x = AL_03, weight = WPER)) +
        subtitle = "Personas que tomaron alcohol alguna vez y recuerdan cuándo empezaron, ponderado",
        x = "Edad de inicio (años)", y = "Personas (millones)",
        caption = paste0(fuente, "\nSe muestran hasta los 50 años; el máximo es ", tabla_inicio$maximo, ".")) +
-  theme_minimal(base_size = 11) +
+  tema_g11(base_size = 11) +
   theme(panel.grid.minor = element_blank(), panel.grid.major.x = element_blank(),
         plot.title.position = "plot")
 

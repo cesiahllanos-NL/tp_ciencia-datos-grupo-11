@@ -170,7 +170,7 @@ g_explo <- ggplot(grupos, aes(x = alcohol, y = tabaco)) +
                       pct1(prom_alcohol), "; tabaco ", pct1(prom_tabaco), ")."),
     x        = "% que tomó alcohol (últimos 30 días)",
     y        = "% que fumó tabaco (últimos 30 días)",
-    caption  = paste0(fuente, "\nPrevalencias ponderadas con WPER. Todos los grupos tienen al menos 135 casos.\n",
+    caption  = paste0(fuente, "\nPrevalencias ponderadas con el factor de expansión. Todos los grupos tienen al menos 135 casos.\n",
                       "Se excluyen 7 personas sin dato de clima educativo. Los ejes no comienzan en cero.")
   ) +
   theme_minimal(base_size = 13) +
@@ -293,7 +293,7 @@ g_comu <- ggplot(tranq, aes(x = x, y = p)) +
                       "según sexo y grupo de edad.\nPoblación de 16 a 75 años de 31 aglomerados urbanos, 2022."),
     x        = "Grupo de edad (años)",
     y        = "% que consumió en los últimos 12 meses",
-    caption  = paste0(fuente, " Prevalencias ponderadas con WPER.\n",
+    caption  = paste0(fuente, " Prevalencias ponderadas con el factor de expansión.\n",
                       "Controlando por edad, las mujeres tienen ", or_txt,
                       " veces las chances de los varones (OR común de Cochran-Mantel-Haenszel, p < 0,001).\n",
                       "La brecha relativa es parecida en todas las edades; en puntos porcentuales crece con la edad.")

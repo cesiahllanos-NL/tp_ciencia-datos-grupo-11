@@ -12,6 +12,7 @@ library(factoextra)
 
 # Funciones propias (carpeta utils/)
 source("utils/guardar.R")
+source("utils/estilo_graficos.R")   # fuente, tema y colores comunes
 source("utils/coma.R")
 
 base <- readRDS("input/base_limpia.rds")
@@ -66,18 +67,22 @@ autovalores <- as.data.frame(res_acm$eig) %>%
 write_csv(autovalores, "output/tablas/t08_acm_autovalores.csv")
 print(head(autovalores, 8))
 
-g_scree <- fviz_screeplot(res_acm, addlabels = TRUE, ncp = 8) +
+g_scree <- fviz_screeplot(res_acm, addlabels = TRUE, ncp = 8,
+                          barfill = color_principal, barcolor = color_principal) +
   labs(title = "ACM: porcentaje de inercia explicado por dimensión",
-       x = "Dimensión", y = "% de inercia") +
-  theme_minimal(base_size = 13)
+       x = "Dimensión", y = "% de inercia", caption = fuente) +
+  tema_g11(base_size = 13)
 guardar(g_scree, "g05_acm_screeplot")
 
 g_mapa <- fviz_mca_var(res_acm, choice = "var.cat", repel = TRUE,
-                       col.var = "#08519c", col.quali.sup = "#cb181d",
+                       col.var = color_principal, col.quali.sup = colores_sexo[["Mujer"]],
                        labelsize = 3.2) +
   labs(title = "ACM: mapa de categorías (dimensiones 1 y 2)",
-       subtitle = "Azul: variables de consumo (activas) · Rojo: sociodemográficas (suplementarias)") +
-  theme_minimal(base_size = 12)
+       subtitle = "Azul: variables de consumo (activas) · Rosa: sociodemográficas (suplementarias)",
+       x = paste0("Dimensión 1 (", coma(res_acm$eig[1, 2]), "%)"),
+       y = paste0("Dimensión 2 (", coma(res_acm$eig[2, 2]), "%)"),
+       caption = fuente) +
+  tema_g11(base_size = 12)
 guardar(g_mapa, "g06_acm_mapa_categorias", w = 11, h = 7)
 
 # ---- 3. Clasificación jerárquica (HCPC) ------------------------------
@@ -114,8 +119,10 @@ perfiles$cluster <- res_hcpc$data.clust[rownames(perfiles), "clust"]
 message("Número de clusters: ", nlevels(perfiles$cluster))
 
 g_dendro <- fviz_dend(res_hcpc, show_labels = FALSE, rect = TRUE,
-                      main = "Dendrograma de la clasificación jerárquica (Ward)") +
-  theme_minimal(base_size = 12)
+                      main = "Dendrograma de la clasificación jerárquica (Ward)",
+                      ylab = "Altura (pérdida de inercia inter-clase)") +
+  labs(caption = fuente) +
+  tema_g11(base_size = 12)
 guardar(g_dendro, "g07_dendrograma")
 
 # Asignar el cluster a cada persona según su perfil
@@ -161,14 +168,14 @@ saveRDS(datos, "input/base_con_clusters.rds")
 coords <- as.data.frame(res_acm$ind$coord[, 1:2]) %>%
   setNames(c("dim1", "dim2")) %>%
   mutate(cluster = datos$cluster)
-ejes <- paste0("Dim ", 1:2, " (", coma(res_acm$eig[1:2, 2]), "%)")
+ejes <- paste0("Dimensión ", 1:2, " (", coma(res_acm$eig[1:2, 2]), "%)")
 
 g_ind <- ggplot(coords, aes(dim1, dim2, color = cluster)) +
   geom_jitter(width = 0.04, height = 0.04, alpha = 0.25, size = 1) +
   stat_ellipse(linewidth = 0.8) +
   labs(title = "Personas en el plano del ACM según cluster",
-       x = ejes[1], y = ejes[2], color = NULL) +
-  theme_minimal(base_size = 13) +
+       x = ejes[1], y = ejes[2], color = NULL, caption = fuente) +
+  tema_g11(base_size = 13) +
   guides(color = guide_legend(override.aes = list(alpha = 1, size = 3)))
 guardar(g_ind, "g08_acm_individuos_clusters")
 
@@ -207,8 +214,9 @@ g_heat <- prev_cluster %>%
   scale_color_manual(values = c("TRUE" = "white", "FALSE" = "black")) +
   scale_x_discrete(labels = function(x) str_wrap(x, 12)) +
   labs(title = "Perfil de consumo de cada cluster",
-       subtitle = "Prevalencias ponderadas por WPER", x = NULL, y = NULL) +
-  theme_minimal(base_size = 13) +
+       subtitle = "Prevalencias ponderadas con el factor de expansión",
+       caption = fuente, x = NULL, y = NULL) +
+  tema_g11(base_size = 13) +
   theme(panel.grid = element_blank())
 guardar(g_heat, "g09_perfil_consumo_clusters")
 
@@ -244,8 +252,8 @@ graf_comp <- function(var, titulo, nombre) {
     scale_y_continuous(labels = function(x) paste0(coma(100 * x, 0), "%")) +
     scale_fill_brewer(palette = "Set1", name = NULL) +
     labs(title = titulo, subtitle = "Distribución ponderada dentro de cada cluster",
-         x = NULL, y = NULL) +
-    theme_minimal(base_size = 13) +
+         caption = fuente, x = NULL, y = NULL) +
+    tema_g11(base_size = 13) +
     theme(legend.position = "right")
   guardar(g, nombre)
 }
@@ -297,8 +305,8 @@ g_p2 <- p2 %>%
   scale_color_brewer(palette = "Dark2", name = NULL) +
   labs(title = "Consumo de alcohol y tabaco según clima educativo, por sexo y edad",
        subtitle = "Prevalencias ponderadas en los últimos 30 días",
-       x = "Grupo de edad", y = NULL) +
-  theme_minimal(base_size = 12) +
+       caption = fuente, x = "Grupo de edad", y = NULL) +
+  tema_g11(base_size = 12) +
   theme(legend.position = "top", strip.text = element_text(face = "bold"))
 guardar(g_p2, "g13_p2_clima_edad_sexo", w = 11, h = 6.5)
 

@@ -61,7 +61,7 @@ tp_g11/
 
 1. Clonar o descargar el repositorio.
 2. Abrir `tp_g11.Rproj` en RStudio (así todas las rutas son relativas).
-3. Instalar los paquetes: `tidyverse`, `scales`, `ggrepel`, `survey`, `FactoMineR`, `factoextra`.
+3. Instalar los paquetes: `tidyverse`, `scales`, `ggrepel`, `survey`, `FactoMineR`, `factoextra`. El análisis se corrió con **R 4.6.1** y estas versiones: tidyverse 2.0.0 (ggplot2 4.0.3, dplyr 1.2.1, tidyr 1.3.2, readr 2.2.0), scales 1.4.0, ggrepel 0.9.8, survey 4.5, FactoMineR 2.18 y factoextra 2.2.0. El detalle completo queda en `output/session_info.txt`, que se regenera al correr `00_main.R`.
 4. Correr `script/00_main.R`, o los scripts de a uno en este orden. Cada uno lee los archivos que dejó el anterior:
 
 | Script | Qué hace | Archivos que genera |
@@ -75,7 +75,7 @@ tp_g11/
 | `07_gini_theil.R` | Gini, Lorenz y Theil | `output/tablas/t14`, `t15`, `output/graficos/g14`, `g15` |
 | `08_graficos_instancia3.R` | Gráficos exploratorio y comunicativo | `output/graficos/grupo_11_exploratorio.jpg`, `grupo_11_comunicativo.jpg` |
 
-Las funciones propias están en `utils/` (`guardar`, `coma`, `fmt_p`, `pct`, `leer_base_encoprac`, `indice_rand_ajustado`, `mediana_ponderada`, `percentil_ponderado`, `desvio_ponderado`, `calcular_gini`, `calcular_theil`, `descomponer_theil`) y se cargan con `source()`.
+Las funciones propias están en `utils/` (`guardar`, `estilo_graficos` (fuente, tema y colores comunes a todos los gráficos), `coma`, `fmt_p`, `pct`, `leer_base_encoprac`, `indice_rand_ajustado`, `mediana_ponderada`, `percentil_ponderado`, `desvio_ponderado`, `calcular_gini`, `calcular_theil`, `descomponer_theil`) y se cargan con `source()`.
 
 ## Decisiones metodológicas y limitaciones
 
@@ -87,7 +87,7 @@ Las funciones propias están en `utils/` (`guardar`, `coma`, `fmt_p`, `pct`, `le
 
 ## Conclusiones principales
 
-- **P1 (tranquilizantes).** La brecha de género se sostiene al controlar por edad y por nivel educativo: las mujeres tienen alrededor del doble de chances de haber consumido tranquilizantes en los últimos 12 meses (OR común ≈ 2,0), con 8,8% contra 4,9% en el total. La diferencia relativa es estable, pero la absoluta crece con la edad (de 2,7 a 11,1 puntos porcentuales). El efecto es chico (V de Cramer = 0,09).
+- **P1 (tranquilizantes).** La brecha de género se sostiene al controlar por edad y por nivel educativo: las mujeres tienen alrededor del doble de chances de haber consumido tranquilizantes en los últimos 12 meses (OR común ≈ 2,0), con 8,8% contra 4,9% en el total. La diferencia relativa es estable, pero la absoluta es mayor en las edades altas: entre 1,4 y 2,7 puntos porcentuales en los menores de 50 años, 5,6 puntos entre los 50 y los 65 años y 11,1 puntos entre los 66 y los 75 años. El efecto es chico (V de Cramer = 0,09).
 - **P2 (perfiles).** A igual edad y sexo, un clima educativo más alto se asocia con más consumo de alcohol y menos de tabaco. El ACM y la clasificación de Ward separan cinco perfiles de consumo; uno de ellos reúne a quienes consumen tranquilizantes (66% mujeres, mayoría de 50 años o más), que es la brecha de P1 vista desde otro método. Ese grupo aparece igual en las seis variantes del análisis de robustez (4, 5 y 6 grupos, sin la intensidad y con el alcohol unificado; tabla `t20`). Hay que leerlo con cuidado: el grupo coincide exactamente con quienes consumieron tranquilizantes, porque en el ACM esa categoría, poco frecuente, pesa mucho y separa a esas personas sola. Lo que cambia según la especificación es cómo se reparten los consumos de alcohol en los demás grupos (índice de Rand ajustado de 0,85 a 0,87 con 4 y 6 grupos, y de 0,20 a 0,56 al cambiar las variables).
 - **P3 (concentración).** Entre quienes tomaron alcohol en el último mes, el Gini de los tragos del día de mayor consumo es 0,50 (0,49 al winsorizar los valores extremos, por lo que la decisión sobre los outliers no cambia la conclusión). El 10% que más toma concentra el 39,8% de los tragos. Más del 90% de la desigualdad ocurre dentro de los grupos: el sexo explica el 1,9% del índice de Theil, el clima educativo el 1,2% y la edad el 8,1%.
 - **Lectura conjunta.** Las variables sociodemográficas ordenan el consumo (quién consume qué), pero explican poco de su intensidad: la mayor parte de la variación está dentro de cada grupo.

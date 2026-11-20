@@ -2,7 +2,7 @@
 # 01_limpieza.R
 # Lectura, selección de variables, recodificación y tratamiento de
 # valores especiales, faltantes y outliers.
-# TP Ciencia de Datos · Grupo 11 · Instancia 2 · ENCoPraC 2022
+# TP Ciencia de Datos · Grupo 11 · Entrega final · ENCoPraC 2022
 # =====================================================================
 
 library(tidyverse)
@@ -11,7 +11,7 @@ library(tidyverse)
 source("utils/leer_base_encoprac.R")
 
 # ---- Rutas -----------------------------------------------------------
-# Cambiá el nombre del archivo por el que descargaste del INDEC.
+# Base de microdatos de la ENCoPraC 2022 descargada del INDEC (ver raw/README_fuentes.txt).
 ruta_base <- "raw/base_encoprac_2022.txt"
 
 dir.create("input", showWarnings = FALSE)

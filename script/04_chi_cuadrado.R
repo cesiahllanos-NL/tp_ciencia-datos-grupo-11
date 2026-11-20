@@ -11,6 +11,7 @@ library(survey)
 
 # Funciones propias (carpeta utils/)
 source("utils/guardar.R")
+source("utils/estilo_graficos.R")   # fuente, tema y colores comunes
 source("utils/coma.R")
 source("utils/fmt_p.R")
 source("utils/pct.R")
@@ -96,7 +97,7 @@ chi_por_estrato <- function(datos, var_estrato, nombre_control) {
       prev <- df %>%
         group_by(sexo) %>%
         summarise(p = weighted.mean(tranq == "Consumió", WPER), .groups = "drop")
-      # Mismo test con el ponderador WPER (Rao-Scott), como en el test general.
+      # Mismo test con el factor de expansión WPER (Rao-Scott), como en el test general.
       # Es más exigente: dentro de cada estrato hay menos casos y el ponderador
       # agranda la varianza, así que algunos estratos dejan de ser significativos.
       rs <- svychisq(~ sexo + tranq, svydesign(ids = ~1, weights = ~WPER, data = df),
@@ -171,7 +172,6 @@ write_csv(tabla_modelo, "output/tablas/t25_modelo_logistico_ponderado.csv")
 print(tabla_modelo)
 
 # ---- 5. Gráficos -----------------------------------------------------
-colores_sexo <- c("Varón" = "#3182bd", "Mujer" = "#de2d26")
 
 # 5a. General
 df_general <- as.data.frame(prop_pond) %>%
@@ -189,8 +189,8 @@ g_general <- ggplot(df_general, aes(x = sexo, y = prev, fill = sexo)) +
                          " (1 gl), ", fmt_p(resultado_general$p_valor),
                          " · V de Cramer = ", coma(v_cramer, 3),
                          " · Rao-Scott: ", fmt_p(resultado_general$rao_scott_p)),
-       x = NULL, y = "Prevalencia (ponderada)") +
-  theme_minimal(base_size = 13)
+       caption = fuente, x = NULL, y = "Prevalencia (ponderada)") +
+  tema_g11(base_size = 13)
 guardar(g_general, "g03_chi2_tranquilizantes_sexo")
 
 # 5b. Por estrato
@@ -220,8 +220,8 @@ g_estratos <- ggplot(df_estratos, aes(x = estrato, y = prev, fill = sexo)) +
                      expand = expansion(mult = c(0, 0.1))) +
   labs(title = "Brecha por sexo en el consumo de tranquilizantes dentro de cada grupo",
        subtitle = "Prevalencia ponderada en los últimos 12 meses y p-valor del test χ² en cada estrato",
-       x = NULL, y = NULL) +
-  theme_minimal(base_size = 12) +
+       caption = fuente, x = NULL, y = NULL) +
+  tema_g11(base_size = 12) +
   theme(legend.position = "top", strip.text = element_text(face = "bold"))
 guardar(g_estratos, "g04_chi2_por_estrato", w = 11, h = 6)
 

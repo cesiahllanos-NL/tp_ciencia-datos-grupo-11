@@ -15,6 +15,7 @@ library(scales)
 
 # Funciones propias (carpeta utils/)
 source("utils/guardar.R")
+source("utils/estilo_graficos.R")   # fuente, tema y colores comunes
 source("utils/coma.R")
 source("utils/pct.R")
 source("utils/calcular_gini.R")
@@ -24,8 +25,6 @@ source("utils/descomponer_theil.R")
 base <- readRDS("input/base_limpia.rds")
 dir.create("output/tablas", recursive = TRUE, showWarnings = FALSE)
 
-fuente <- paste0("Fuente: elaboración propia en base a la ENCoPraC 2022 ",
-                 "(INDEC-SEDRONAR). Ponderado por WPER.")
 
 
 # ---- 1. Universo -------------------------------------------------------
@@ -120,7 +119,7 @@ g_lorenz <- ggplot(curvas, aes(x = prop_personas, y = prop_tragos,
     color = NULL, linetype = NULL,
     caption = fuente
   ) +
-  theme_minimal(base_size = 11) +
+  tema_g11(base_size = 11) +
   theme(legend.position = "bottom",
         panel.grid.minor = element_blank(),
         plot.title.position = "plot")
@@ -186,7 +185,7 @@ g_theil <- tabla_theil |>
     y = NULL, fill = NULL,
     caption = fuente
   ) +
-  theme_minimal(base_size = 11) +
+  tema_g11(base_size = 11) +
   theme(legend.position = "bottom",
         panel.grid.minor = element_blank(),
         panel.grid.major.y = element_blank(),

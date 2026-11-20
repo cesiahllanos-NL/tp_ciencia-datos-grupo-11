@@ -18,6 +18,7 @@ library(scales)
 
 # Funciones propias (carpeta utils/)
 source("utils/guardar.R")
+source("utils/estilo_graficos.R")   # fuente, tema y colores comunes
 source("utils/coma.R")
 source("utils/pct.R")
 source("utils/indice_rand_ajustado.R")
@@ -26,8 +27,6 @@ dir.create("output/tablas", recursive = TRUE, showWarnings = FALSE)
 
 datos <- readRDS("input/base_con_clusters.rds")
 
-fuente <- paste0("Fuente: elaboración propia en base a la ENCoPraC 2022 ",
-                 "(INDEC-SEDRONAR). Ponderado por WPER.")
 
 activas_todas          <- c("alcohol", "intensidad", "tabaco", "marihuana", "tranquilizantes")
 activas_sin_intensidad <- setdiff(activas_todas, "intensidad")
@@ -194,7 +193,7 @@ g_perfiles <- perfiles_k %>%
     subtitle = "Porcentaje de cada grupo que consumió, ponderado. Entre paréntesis, el tamaño del grupo",
     x = NULL, y = NULL, caption = fuente
   ) +
-  theme_minimal(base_size = 11) +
+  tema_g11(base_size = 11) +
   theme(panel.grid = element_blank(), strip.text = element_text(face = "bold", hjust = 0),
         plot.title.position = "plot")
 
