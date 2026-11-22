@@ -85,6 +85,17 @@ Las funciones propias están en `utils/` (`guardar`, `estilo_graficos` (fuente, 
 - **Clusters.** La cantidad de grupos la elige el criterio automático de HCPC (5 en esta base). El script `06` repite el análisis con 4 y 6 grupos, sin la variable de intensidad y con el alcohol unificado en una sola variable, porque "alcohol en 12 meses" e "intensidad" comparten información.
 - **Códigos especiales.** Se pasan a NA en `01_limpieza.R` según el diccionario de registro del INDEC. En la edad de inicio (`AL_03`), 998 = no recuerda y 999 = no sabe/no contesta (681 casos). En los tragos (`AL19_TRAGOS_TOTAL`), 777 = "no consume de forma excesiva" (182 casos) y 888 = "no se pueden calcular los tragos" (45 casos). El 777 no es no respuesta: son personas que tomaron en el último mes sin consumo excesivo. Como no tienen una cantidad de tragos, quedan fuera del Gini, del Theil y del clustering; la tabla `t19` muestra que excluir los 227 casos casi no cambia el perfil de la muestra, aunque probablemente subrepresente un poco a quienes toman poco.
 
+## Cambios a partir de las devoluciones
+
+| Entrega | Devolución | Qué hicimos |
+|---|---|---|
+| Instancia 1 | Profundizar la interpretación | Cada resultado se interpreta y se conecta con la hipótesis |
+| Instancia 1 | Cuidado con los outliers de tragos | Tres tratamientos (winsorizar, logaritmo, categorizar); el Gini se calcula con y sin winsorizar (`01_limpieza.R`, `07_gini_theil.R`) |
+| Instancia 1 | Chi² para P1 y clusters para P2 | Chi² por estrato con Cochran-Mantel-Haenszel (`04_chi_cuadrado.R`), y ACM con clasificación de Ward (`05_clustering.R`) |
+| Instancia 2 | Robustez de los clusters | Se repiten con 4, 5 y 6 grupos y con otras variables (`06_robustez_clusters.R`, tablas `t20` y `t21`) |
+| Instancia 2 | Quedarse con lo principal | De las preguntas nuevas sumamos solo la concentración (P3); el resto queda como próximos pasos |
+| Revisión final | Chequeo propio | Chi² ponderado (Rao-Scott) en cada estrato (`t06`) y código 777 corregido según el diccionario del INDEC |
+
 ## Conclusiones principales
 
 - **P1 (tranquilizantes).** La brecha de género se sostiene al controlar por edad y por nivel educativo: las mujeres tienen alrededor del doble de chances de haber consumido tranquilizantes en los últimos 12 meses (OR común ≈ 2,0), con 8,8% contra 4,9% en el total. La diferencia relativa es estable, pero la absoluta es mayor en las edades altas: entre 1,4 y 2,7 puntos porcentuales en los menores de 50 años, 5,6 puntos entre los 50 y los 65 años y 11,1 puntos entre los 66 y los 75 años. El efecto es chico (V de Cramer = 0,09).
@@ -92,3 +103,10 @@ Las funciones propias están en `utils/` (`guardar`, `estilo_graficos` (fuente, 
 - **P3 (concentración).** Entre quienes tomaron alcohol en el último mes, el Gini de los tragos del día de mayor consumo es 0,50 (0,49 al winsorizar los valores extremos, por lo que la decisión sobre los outliers no cambia la conclusión). El 10% que más toma concentra el 39,8% de los tragos. Más del 90% de la desigualdad ocurre dentro de los grupos: el sexo explica el 1,9% del índice de Theil, el clima educativo el 1,2% y la edad el 8,1%.
 - **Lectura conjunta.** Las variables sociodemográficas ordenan el consumo (quién consume qué), pero explican poco de su intensidad: la mayor parte de la variación está dentro de cada grupo.
 - **Limitaciones.** Son asociaciones, no causas. Los clusters dependen de la cantidad de grupos y de las variables elegidas, y el consumo es autorreportado. La variable de tragos mide el día de mayor consumo en los últimos 30 días, no el consumo total.
+
+## Uso de inteligencia artificial
+
+Usamos **Claude (Anthropic)** como asistente. Todo lo que generó lo revisamos, lo corrimos y lo comparamos con nuestras tablas.
+
+- **Para qué la usamos más:** encontrar y corregir errores en el código de R; mejorar el formato de los gráficos y de las diapositivas; chequear que el README, las tablas y la presentación digan lo mismo; ordenar el repositorio y redactar la documentación; redactar los textos de las diapositivas a partir de nuestras ideas.
+- **Para qué la usamos menos:** elegir el tema, las preguntas y la hipótesis; decidir los métodos (los ajustamos con las devoluciones del profesor); decidir qué significan los resultados (la síntesis la revisamos y ajustamos nosotros); validar los datos (comparamos las prevalencias con el informe oficial).
