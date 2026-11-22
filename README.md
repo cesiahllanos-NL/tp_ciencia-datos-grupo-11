@@ -106,9 +106,7 @@ Las funciones propias están en `utils/` (`guardar`, `estilo_graficos` (fuente, 
 
 ## Uso de inteligencia artificial
 
-El tema, las preguntas, la hipótesis, la elección de los métodos y la interpretación de los resultados son trabajo del grupo, ajustados con las devoluciones del profesor en cada instancia. Usamos Claude (Anthropic) como herramienta de apoyo, como haríamos con la documentación de R o un foro.
+Usamos **Claude (Anthropic)** como asistente. Todo lo que generamos usamos a Claude para que nos lo revise.
 
-- **Para qué la usamos:** resolver errores puntuales del código de R, sugerencias de formato para gráficos y diapositivas, y revisar la redacción.
-- **Para qué no la usamos:** plantear el problema, decidir cómo tratar los datos, elegir los métodos ni sacar las conclusiones.
-
-Todo lo que sugirió lo revisamos, lo corrimos y lo comparamos con nuestras propias tablas antes de incorporarlo. Cualquier integrante del grupo puede explicar cada script y cada decisión.
+- **Para qué la usamos más:** encontrar y corregir errores en el código de R; mejorar el formato de los gráficos y de las diapositivas; chequear que el README, las tablas y la presentación digan lo mismo; ordenar el repositorio y redactar la documentación; redactar los textos de las diapositivas a partir de nuestras ideas.
+- **Para qué no la usamos:** elegir el tema, las preguntas y la hipótesis; decidir los métodos; decidir qué significan los resultados (la síntesis la revisamos y ajustamos nosotros); validar los datos (comparamos las prevalencias con el informe oficial).
